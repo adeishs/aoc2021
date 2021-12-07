@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'pp'
-
 def read_input_card
   # skip empty line
   return nil if gets.nil?

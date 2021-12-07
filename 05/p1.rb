@@ -5,10 +5,9 @@ X_SRC, Y_SRC, X_DEST, Y_DEST = (0..3).to_a
 
 freq = {}
 $stdin.each_line
-  .map { |line| line.chomp.split(/,| \-> /).map(&:to_i) }
-  .select { |ps| ps[X_SRC] == ps[X_DEST] || ps[Y_SRC] == ps[Y_DEST] }
-  .each do |ps|
- 
+      .map { |line| line.chomp.split(/,| -> /).map(&:to_i) }
+      .select { |ps| ps[X_SRC] == ps[X_DEST] || ps[Y_SRC] == ps[Y_DEST] }
+      .each do |ps|
   if ps[X_SRC] == ps[X_DEST]
     step = ps[Y_DEST] <=> ps[Y_SRC]
     (ps[Y_SRC]..ps[Y_DEST]).step(step).each do |y|
@@ -25,7 +24,7 @@ $stdin.each_line
 end
 
 num_of_overlaps = 0
-freq.keys.each do |x|
+freq.each_key do |x|
   num_of_overlaps += freq[x].values.select { |v| v >= 2 }.size
 end
 

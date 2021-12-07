@@ -1,23 +1,25 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+X_SRC, Y_SRC, X_DEST, Y_DEST = (0..3).to_a
+
 freq = {}
 $stdin.each_line
   .map { |line| line.chomp.split(/,| \-> /).map(&:to_i) }
-  .select { |ps| ps[0] == ps[2] || ps[1] == ps[3] }
+  .select { |ps| ps[X_SRC] == ps[X_DEST] || ps[Y_SRC] == ps[Y_DEST] }
   .each do |ps|
  
-  if ps[0] == ps[2]
-    step = ps[1] > ps[3] ? -1 : 1
-    (ps[1]..ps[3]).step(step).each do |y|
-      freq[ps[0]] = Hash.new(0) if freq[ps[0]].nil?
-      freq[ps[0]][y] += 1
+  if ps[X_SRC] == ps[X_DEST]
+    step = ps[Y_DEST] <=> ps[Y_SRC]
+    (ps[Y_SRC]..ps[Y_DEST]).step(step).each do |y|
+      freq[ps[X_SRC]] = Hash.new(0) if freq[ps[X_SRC]].nil?
+      freq[ps[X_SRC]][y] += 1
     end
-  elsif ps[1] == ps[3]
-    step = ps[0] > ps[2] ? -1 : 1
-    (ps[0]..ps[2]).step(step).each do |x|
+  elsif ps[Y_SRC] == ps[Y_DEST]
+    step = ps[X_DEST] <=> ps[X_SRC]
+    (ps[X_SRC]..ps[X_DEST]).step(step).each do |x|
       freq[x] = Hash.new(0) if freq[x].nil?
-      freq[x][ps[1]] += 1
+      freq[x][ps[Y_SRC]] += 1
     end
   end
 end

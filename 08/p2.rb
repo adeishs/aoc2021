@@ -17,18 +17,11 @@ def decode(code)
     seg_map[rev_map[m].join] = m.to_s
   end
 
-  [[4, 9], [7, 0]].each do |sub, sup|
-    rev_map[sup] = in_segs.delete_at(find_idx(in_segs, rev_map[sub]))
+  [[4, 9], [7, 0], [nil, 6], [7, 3]].each do |sub, sup|
+    rev_map[sup] = in_segs.delete_at(sub.nil? ? 0
+                                              : find_idx(in_segs, rev_map[sub]))
     seg_map[rev_map[sup].join] = sup.to_s
   end
-
-  i = 6
-  rev_map[i] = in_segs.delete_at(0)
-  seg_map[rev_map[i].join] = i
-
-  sub, sup = [7, 3]
-  rev_map[sup] = in_segs.delete_at(find_idx(in_segs, rev_map[sub]))
-  seg_map[rev_map[sup].join] = sup.to_s
 
   sub, sup = [5, 6]
   i = in_segs.find_index { |c| c & rev_map[sup] == c }

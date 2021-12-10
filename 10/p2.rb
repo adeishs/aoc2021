@@ -29,7 +29,7 @@ def get_err_score(codes)
 end
 
 scores = $stdin.each_line
-               .map { |line| get_err_score(line.chomp.split('')) }
+               .map { |line| get_err_score(line.chomp.chars) }
                .reject(&:nil?)
                .sort
 puts scores[scores.count / 2]

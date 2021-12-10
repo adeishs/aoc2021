@@ -29,4 +29,4 @@ def get_err_score(codes)
 end
 
 puts $stdin.each_line
-           .map { |line| get_err_score(line.chomp.split('')) }.reduce(:+)
+           .map { |line| get_err_score(line.chomp.chars) }.reduce(:+)

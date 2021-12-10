@@ -18,7 +18,7 @@ SCORE = {
 def get_err_score(codes)
   expecteds = []
   codes.each do |c|
-    if EXPECTED.keys.any?(c)
+    if !EXPECTED[c].nil?
       expecteds.push(EXPECTED[c])
     elsif c != expecteds.pop
       return SCORE[c]

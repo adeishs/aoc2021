@@ -26,7 +26,9 @@ def parse_input
 end
 
 dot, folds = parse_input
+last_fold = {}
 folds.each do |axis, val|
+  last_fold[axis] = val
   if axis == 'x'
     dot.keys.select { |x| x > val }.each do |x|
       dot[x].each_key do |y|
@@ -46,17 +48,7 @@ folds.each do |axis, val|
   end
 end
 
-dots = []
-dot.each_key do |x|
-  dot[x].each_key do |y|
-    dots[y] ||= []
-    dots[y][x] = '#'
-  end
-end
+dots = Array.new(last_fold['y']) { Array.new(last_fold['x'], '.') }
+dot.each_key { |x| dot[x].each_key { |y| dots[y][x] = '#' } }
 
-(0...dots.count).each do |y|
-  (0...dots[y].count).each do |x|
-    print dots[y][x].nil? ? '.' : '#'
-  end
-  puts
-end
+puts dots.map { |ds| ds.join('') }.join("\n")

@@ -34,7 +34,7 @@ $stdin.each_line.map(&:chomp).each do |line|
   a, b = line.split('-')
   [[a, b], [b, a]].each do |src, dest|
     if dest != START_CAVE_NAME && src != END_CAVE_NAME
-      paths[src] ||= Array.new
+      paths[src] ||= []
       paths[src].push(dest)
     end
   end

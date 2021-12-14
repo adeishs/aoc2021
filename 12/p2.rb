@@ -19,9 +19,7 @@ def get_num_of_paths(paths, cave_name, small_cave_visited, visited_twice_cave)
   small_cave_visited ||= Set.new
   small_cave_visited = small_cave_visited.dup
   if small_cave(cave_name)
-    if small_cave_visited.member?(cave_name)
-      visited_twice_cave = cave_name
-    end
+    visited_twice_cave = cave_name if small_cave_visited.member?(cave_name)
 
     small_cave_visited.add(cave_name)
   end
@@ -40,7 +38,7 @@ $stdin.each_line.map(&:chomp).each do |line|
   a, b = line.split('-')
   [[a, b], [b, a]].each do |src, dest|
     if dest != START_CAVE_NAME && src != END_CAVE_NAME
-      paths[src] ||= Array.new
+      paths[src] ||= []
       paths[src].push(dest)
     end
   end

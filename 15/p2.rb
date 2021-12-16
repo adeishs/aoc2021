@@ -5,6 +5,22 @@ def in_range(x, y, risks)
   x.between?(0, risks[0].count - 1) && y.between?(0, risks.count - 1)
 end
 
+def min_idx(paths)
+  return nil if paths.empty?
+
+  idx = 0
+  min_cost = paths[0][0]
+  (1...paths.count).each do |i|
+    curr_cost = paths[i][0]
+    if curr_cost < min_cost
+      min_cost = curr_cost
+      idx = i
+    end
+  end
+
+  idx
+end
+
 def calc_min_cost(risks)
   paths = [[0, 0, 0]]
   costs = Array.new(risks.count) { Array.new(risks[0].count, 999_999_999) }
@@ -27,7 +43,8 @@ def calc_min_cost(risks)
       end
     end
 
-    paths.sort! { |a, b| a[0] <=> b[0] }
+    idx = min_idx(paths)
+    paths.unshift(paths.delete_at(idx)) if (idx || 0) > 0
   end
 end
 
@@ -46,7 +63,7 @@ def expand_map(risks)
   y_len = risks.count
   (0..3).each do |y|
     risks[0...y_len].each do |cols|
-      risks.append(cols.map { |r| incr(r, y) })
+      risks.push(cols.map { |r| incr(r, y) })
     end
   end
 

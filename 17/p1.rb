@@ -9,42 +9,27 @@ def parse_input(inp)
   end.to_h
 end
 
-def calc_min_vx(target)
-  vx = 0
-  loop do
-    dx = vx * (vx + 1) / 2
-    return vx if dx.between?(target[:x][:min], target[:x][:max])
-    return nil if dx > target[:x][:max]
-
-    vx += 1
-  end
-end
-
-def calc_dy(target, vx, vy)
-  dx = 0
-  dy = 0
-  max_dy = 0
-  loop do
-    dx += vx
-    dy += vy
-    max_dy = [dy, max_dy].max
-    return max_dy if dy < target[:y][:min]
-
-    vx -= 1 if vx.positive?
-    vy -= 1
-  end
-end
-
-def calc_max_dy(target, vx)
-  vy = vx
-  max = vy
-  loop do
-    curr = calc_dy(target, vx, vy)
-    max = [curr, max].max
-    vy += 1
-    return max if vy >= target[:y][:min].abs
-  end
-end
-
 target = parse_input($stdin.gets.chomp)
-puts calc_max_dy(target, calc_min_vx(target))
+max_height = target[:y][:min]
+(1..target[:x][:max]).each do |tx|
+  (target[:y][:min]...target[:x][:max] - target[:y][:max]).each do |ty|
+    dx = 0
+    dy = 0
+    vx = tx
+    vy = ty
+    height = 0
+    while vx > 0 || dy > target[:y][:min] do
+      dx += vx
+      dy += vy
+      height = [height, dy].max
+      vx -= 1 if vx.positive?
+      vy -= 1
+      if dx.between?(target[:x][:min], target[:x][:max]) &&
+        dy.between?(target[:y][:min], target[:y][:max])
+        max_height = [max_height, height].max
+        break
+      end
+    end
+  end
+end
+puts max_height

@@ -17,16 +17,16 @@ count = 0
     dy = 0
     vx = tx
     vy = ty
-    while vx > 0 || dy > target[:y][:min] do
+    while vx.positive? || dy > target[:y][:min]
       dx += vx
       dy += vy
       vx -= 1 if vx.positive?
       vy -= 1
-      if dx.between?(target[:x][:min], target[:x][:max]) &&
-        dy.between?(target[:y][:min], target[:y][:max])
-        count += 1
-        break
-      end
+      next unless dx.between?(target[:x][:min], target[:x][:max]) &&
+                  dy.between?(target[:y][:min], target[:y][:max])
+
+      count += 1
+      break
     end
   end
 end

@@ -18,17 +18,17 @@ max_height = target[:y][:min]
     vx = tx
     vy = ty
     height = 0
-    while vx > 0 || dy > target[:y][:min] do
+    while vx.positive? || dy > target[:y][:min]
       dx += vx
       dy += vy
       height = [height, dy].max
       vx -= 1 if vx.positive?
       vy -= 1
-      if dx.between?(target[:x][:min], target[:x][:max]) &&
-        dy.between?(target[:y][:min], target[:y][:max])
-        max_height = [max_height, height].max
-        break
-      end
+      next unless dx.between?(target[:x][:min], target[:x][:max]) &&
+                  dy.between?(target[:y][:min], target[:y][:max])
+
+      max_height = [max_height, height].max
+      break
     end
   end
 end

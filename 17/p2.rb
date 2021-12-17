@@ -9,64 +9,25 @@ def parse_input(inp)
   end.to_h
 end
 
-def calc_min_vx(target)
-  vx = 0
-  min_vx = nil
-  loop do
-    dx = vx * (vx + 1) / 2
-    return vx if dx.between?(target[:x][:min], target[:x][:max])
-    return nil if dx > target[:x][:max]
-
-    vx += 1
-  end
-end
-
-def calc_dy(target, vx, vy)
-  dx = 0
-  dy = 0
-  max_dy = 0
-  loop do
-    dx += vx
-    dy += vy
-    max_dy = [dy, max_dy].max
-    return max_dy if dy < target[:y][:min]
-
-    vx -= 1 if vx.positive?
-    vy -= 1
-  end
-end
-
-def calc_max_dy(target, vx)
-  vy = vx
-  max = vy
-  loop do
-    curr = calc_dy(target, vx, vy)
-    max = [curr, max].max
-    vy += 1
-    return max if vy >= target[:y][:min].abs
-  end
-end
-
-def correct_velo(target, vx, vy)
-  dx = 0
-  dy = 0
-  while dx <= target[:x][:max] && dy >= target[:y][:min]
-    dx += vx
-    dy += vy
-    return true if dx.between?(target[:x][:min], target[:x][:max]) &&
-                   dy.between?(target[:y][:min], target[:y][:max])
-
-    vx -= 1 if vx.positive?
-    vy -= 1
-  end
-
-  false
-end
-
 target = parse_input($stdin.gets.chomp)
-min_vx = calc_min_vx(target)
-max_dy = calc_max_dy(target, min_vx)
-puts (min_vx..target[:x][:max]).to_a
-                               .product((target[:y][:min]..max_dy).to_a)
-                               .select { |vx, vy| correct_velo(target, vx, vy) }
-                               .count
+count = 0
+(1..target[:x][:max]).each do |tx|
+  (target[:y][:min]...target[:x][:max] - target[:y][:max]).each do |ty|
+    dx = 0
+    dy = 0
+    vx = tx
+    vy = ty
+    while vx > 0 || dy > target[:y][:min] do
+      dx += vx
+      dy += vy
+      vx -= 1 if vx.positive?
+      vy -= 1
+      if dx.between?(target[:x][:min], target[:x][:max]) &&
+        dy.between?(target[:y][:min], target[:y][:max])
+        count += 1
+        break
+      end
+    end
+  end
+end
+puts count

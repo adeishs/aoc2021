@@ -28,14 +28,11 @@ until winner
   pos[player] = 1 + (pos[player] - 1 + rolls.reduce(:+)) % 10
   score[player] += pos[player]
 
-  (1..2).each do |c|
-    if score[player] >= 1000
-      winner = c
-      break
-    end
+  if score[player] >= 1000
+    winner = player
+  else
+    player = other_player(player)
   end
-
-  player = other_player(player)
 end
 
 puts num_of_rolls * score[other_player(winner)]

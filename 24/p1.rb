@@ -42,14 +42,10 @@ def build_deps(const_sets, i, zs, levels)
   build_deps(const_sets, i - 1, sols.keys, levels) if i > 0
 end
 
-def cmp_levels(a, b)
-  b[0] == a[0] ? b[1] <=> a[1] : b[0] <=> a[0]
-end
-
 def solve(i, z, sol, levels)
   return sol.join('') if i == MODEL_LEN
 
-  levels[i][z].sort { |a, b| cmp_levels(a, b) }.each do |l|
+  levels[i][z].sort { |a, b| b[0] <=> a[0] || b[1] <=> a[1] }.each do |l|
     w, nz = l
     ans = solve(i + 1, nz, sol + [w], levels)
     return ans if ans
